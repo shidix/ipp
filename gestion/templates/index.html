@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+
+{% block central_content %}
+    <div class="row toolbar-search p-2 m-0">{% include "services-search.html" %} </div>
+
+    <div class="content mt-3">
+    
+        {%comment%} PC VERSION {%endcomment%}
+
+        <div class="d-none d-lg-block"> 
+            <div class="toolbar-content mt-3 mb-3">
+                <h2 class="pathway b-right">
+                    {%trans 'Servicios'%} <span id="items-counter" class="badge badge-secondary">{{items|length}}</span></h2>
+
+                <div><button type="button" class="btn btn-sm ark new w-100" data-url="{%url "services-form"%}" 
+                    data-target-modal="common-modal"> <i class="fas fa-plus"></i> {% trans 'Nuevo Servicio' %}</button></div>
+            </div>
+            <div id="item-list" class="ml-list">{% include "services-list.html" %}</div>
+        </div>
+    
+        {%comment%} MOBILE VERSION {%endcomment%}
+        <div class="d-lg-none"> 
+            <div class="toolbar-content mt-3 mb-3">
+                <h2 class="pathway b-right">
+                    {%trans 'Servicios'%} <span id="items-counter" class="badge badge-secondary">{{items|length}}</span></h2>
+
+                <div><button type="button" class="btn btn-sm ark new w-100" data-url="{%url "services-form"%}" 
+                    data-target-modal="common-modal"> <i class="fas fa-plus"></i> {% trans 'Nuevo' %}</button></div>
+            </div>
+            <div id="item-list" class="ml-list">{% include "services-list.html" %}</div>
+        </div>
+
+    </div>
+    {% include "common-modal.html" %}
+{% endblock central_content %}

@@ -1,0 +1,12 @@
+{% extends "pwa-base.html" %}
+{% load static i18n %}
+
+{% block content%}
+    <div class="alert alert-info text-center p-2"><strong>SERVICIOS DE HOY</strong></div>
+    {% for item in obj.services.all %}
+        <div class="mt-2">
+            <a class="btn w-100" href="{% url "pwa-employee-service" item.id %}" style="background:{{item.status.color}}">
+                {{item.service_type.name}}</a>
+        </div>
+    {% endfor %}
+{% endblock %}

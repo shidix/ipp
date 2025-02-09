@@ -1,0 +1,80 @@
+{% load i18n %}
+
+{%comment%} PC VERSION {%endcomment%}
+
+<div class="d-none d-lg-block"> 
+    <div class="row main-th py-3 m-0">
+        <div class="col-2"> {% trans 'Servicio' %} </div>
+        <div class="col-2"> {% trans 'Técnico' %} </div>
+        <div class="col-2"> {% trans 'Cliente' %} </div>
+        <div class="col-2"> {% trans 'Dirección' %} </div>
+        <div class="col-1"> {% trans 'Info' %} </div>
+        <div class="col-1"> {% trans 'Estado' %} </div>
+        <div class="col-1"></div>
+    </div>
+
+    {% for item in item_list %}
+        <div class="row list-item pt-2 pb-2 m-0" id="row_{{item.id}}">
+            <div class="col-2">{{item.service_type.name}}</div>
+            <div class="col-2">{{item.employee.name}}</div>
+            <div class="col-2">{{item.client.name}}</div>
+            <div class="col-2">{{item.client.address}}</div>
+            <div class="col-1"><i class="fas fa-info-circle"></i></div>
+            <div class="col-2"><span class="status-waiting">En espera</span></div>
+            <div class="col-1 text-right">
+                <a class="btn btn-xs ark" data-url="{% url "services-form" %}" data-target-modal="common-modal" 
+                    data-obj_id="{{item.id}}" title="{% trans 'Editar' %}"><i class="fas fa-edit"></i></a> 
+                <a class="btn btn-xs ark" data-url="{% url "services-remove" %}" data-target="item-list" data-obj_id="{{item.id}}" 
+                    title="{% trans 'Borrar' %}" data-confirm="{% trans "Are you sure to remove this element?" %}">
+                    <i class="fas fa-trash"></i></a> 
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+
+{%comment%} MOBILE VERSION {%endcomment%}
+
+<div class="d-lg-none"> 
+    {% for item in item_list %}
+    <div class="row list-item-cl pt-2 pb-2 m-0" id="row_{{item.id}}">
+        <div class="col-12"> <small><i class="fas fa-tools orange"></i> {% trans 'Servicio' %}</small> <br /> <strong>{{item.service.name}}</strong></div>
+        <div class="col-6 mt-3"> <small><i class="fas fa-user orange"></i> {% trans 'Técnico' %}</small> <br /> <strong>{{item.employee.name}}</strong></div>
+        <div class="col-5 offset-1 mt-3"> <small><i class="fas fa-user orange"></i> {% trans 'Cliente' %} </small> <br /> <strong>{{item.client.name}}</strong> </div>
+        <div class="col-6 mt-3"> <small><i class="fas fa-info-circle orange"></i> {% trans 'Info' %} </small> <br /> <strong>Info</strong> </div>
+        <div class="col-5 offset-1 mt-3"> <small><i class="fas fa-traffic-light orange"></i> {% trans 'Estado' %} </small> <br /> <strong><span class="status-waiting">En espera</span></strong> </div>
+        <div class="col-12 mt-"> <small><i class="fas fa-map-marker orange"></i> {% trans 'Dirección' %}</small> <br /><strong>{{item.client.address}}</strong> </div>
+        <div class="col-5 mt-2">
+            <button type="button" class="btn btn-primary-outline ark w-100" data-url="{% url "services-form" %}" data-target-modal="common-modal" 
+                data-obj_id="{{item.id}}" title="{% trans 'Editar' %}"><small>Editar</small></button> 
+        </div>
+        <div class="col-5 offset-2 mt-2">
+            <button type="button" class="btn btn-outline-danger ark w-100" data-url="{% url "services-remove" %}" data-target="item-list" data-obj_id="{{item.id}}" 
+                title="{% trans 'Borrar' %}" data-confirm="{% trans "Are you sure to remove this element?" %}"><small>Borrar</small></button> 
+        </div>
+    </div>
+
+    {% endfor %}
+
+    {%comment%}
+        <div class="row main-th py-3 m-0">
+            <div class="col-3"> {% trans 'Trabajador/a' %} </div>
+            <div class="col-2"> {% trans 'Hora entrada' %} </div>
+            <div class="col-2"> {% trans 'Hora salida' %} </div>
+            <div class="col-2"> {% trans 'Usuario' %} </div>
+            <div class="col-3"> {% trans 'Dirección' %} </div>
+        </div>
+        {% for item in item_list %}
+            <div class="row list-item pt-2 pb-2 m-0" id="row_{{item.id}}">
+                <div class="col-3">{{item.employee.name}}</div>
+                <div class="col-2">
+                    <span class="badge bg-success" style="color:white !important">{{item.ini_date|date:"d-m-Y H:i"}}</span></div>
+                <div class="col-2"><span class="badge bg-danger" style="color:white !important">{{item.end_date|date:"d-m-Y H:i"}}</span></div>
+                <div class="col-2">{{item.client.name}}</div>
+                <div class="col-3">{{item.client.address}}</div>
+            </div>
+        {% endfor %}
+     {%endcomment%}
+</div>
+
+
