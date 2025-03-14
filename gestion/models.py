@@ -131,4 +131,24 @@ class ServiceImage(models.Model):
         verbose_name = _('Imagen del Servicio')
         verbose_name_plural = _('Imagenes de los Servicios')
 
+'''
+    NOTES
+'''
+def upload_note_audio(instance, filename):
+    ascii_filename = str(filename.encode('ascii', 'ignore'))
+    instance.filename = ascii_filename
+    #folder = "notes/%s" % (instance.id)
+    folder = "notes"
+    return '/'.join(['%s' % (folder), datetime.datetime.now().strftime("%Y%m%d%H%M%S") + ascii_filename])
+
+class Note(models.Model):
+    deleted = models.BooleanField(default=False, verbose_name=_('Desactivado'));
+    date = models.DateTimeField(default=datetime.datetime.now(), null=True, verbose_name=_('Fecha'))
+    concept = models.TextField(verbose_name = _('Notas'), null=True, default='')
+    audio = models.FileField(upload_to=upload_note_audio, blank=True, verbose_name="Audio", help_text="Select file to upload")
+
+    class Meta:
+        verbose_name = _('Nota')
+        verbose_name_plural = _('Notas')
+
 

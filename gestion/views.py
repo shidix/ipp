@@ -3,12 +3,13 @@ from django.core.files.base import ContentFile
 from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
 import os, csv
 
 from ipp.decorators import group_required
 from ipp.commons import get_float, get_or_none, get_param, get_session, set_session, show_exc, generate_qr, csv_export
-from .models import Employee, Client, Service, ServiceType, ServiceStatus
+from .models import Employee, Client, Service, ServiceType, ServiceStatus, Note
 
 ACCESS_PATH="https://ipp.shidix.es/gestion/services/client/"
 
@@ -32,7 +33,9 @@ def get_services(request):
 def index(request):
     init_session_date(request, "s_idate")
     init_session_date(request, "s_edate")
-    return render(request, "index.html", {"item_list": get_services(request)})
+    print(get_services(request))
+    print(get_notes(request))
+    return render(request, "index.html", {"item_list": get_services(request), "notes": get_notes(request)})
 
 @group_required("admins",)
 def services_list(request):
@@ -79,6 +82,50 @@ def services_remove(request):
     if obj != None:
         obj.delete()
     return render(request, "services-list.html", {"item_list": get_services(request)})
+
+'''
+    NOTES
+'''
+def get_notes(request, deleted=False):
+    return Note.objects.filter(deleted=deleted)
+
+@group_required("admins",)
+def notes_list(request):
+    deleted = True if get_param(request.GET, "deleted") == "True" else False
+    return render(request, "notes/notes-list.html", {"notes": get_notes(request, deleted)})
+
+@group_required("admins",)
+def notes_search(request):
+    return render(request, "notes/notes-list.html", {"notes": get_notes(request)})
+
+@group_required("admins",)
+def notes_form(request):
+    obj = get_or_none(Note, get_param(request.GET, "obj_id"))
+    return render(request, "notes/notes-form.html", {'obj': obj})
+
+@group_required("admins",)
+def notes_form_save(request):
+    obj = get_or_none(Note, get_param(request.GET, "obj_id"))
+    if obj == None:
+        obj = Note.objects.create()
+    obj.concept = get_param(request.GET, "concept")
+    obj.save()
+    return render(request, "notes/notes-list.html", {"notes": get_notes(request)})
+
+@group_required("admins",)
+def notes_remove(request):
+    obj = get_or_none(Note, request.GET["obj_id"]) if "obj_id" in request.GET else None
+    if obj != None:
+        obj.delete()
+    return render(request, "notes/notes-list.html", {"notes": get_notes(request)})
+
+@group_required("admins",)
+def notes_remove_soft(request):
+    obj = get_or_none(Note, request.GET["obj_id"]) if "obj_id" in request.GET else None
+    if obj != None:
+        obj.deleted = True
+        obj.save()
+    return render(request, "notes/notes-list.html", {"notes": get_notes(request)})
 
 
 '''
@@ -225,4 +272,21 @@ def clients_print_qr(request, obj_id):
 @group_required("admins",)
 def clients_services(request, obj_id):
     return render(request, "clients/clients-services.html", {"obj": get_or_none(Client, obj_id)})
+
+'''
+    Speech to text
+'''
+@csrf_exempt
+def set_note_concept(request):
+    #print("--1--")
+    #print(request.POST)
+    token = get_param(request.POST, "token")
+    text = get_param(request.POST, "text")
+    note = get_or_none(Note, get_param(request.POST, "note"))
+    if token == "1234":
+        #print("--2--")
+        #print(text)
+        note.concept = text
+        note.save()
+    return HttpResponse("")
 

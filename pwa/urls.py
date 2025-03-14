@@ -12,5 +12,7 @@ urlpatterns = [
     path('employee/', views.employee_home, name="pwa-employee"),
     path('employee/service/<int:obj_id>/', views.employee_service, name="pwa-employee-service"),
     path('employee/service/save/', views.employee_service_save, name="pwa-employee-service-save"),
+    path('employee/note/', views.employee_note, name="pwa-employee-note"),
+    path('employee/note/save/', views.employee_note_save, name="pwa-employee-note-save"),
 ]
 

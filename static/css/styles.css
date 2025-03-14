@@ -914,10 +914,15 @@ a.dropdown-toggle { font-size: 1.6rem !important; }
 }
 
 .nav-tabs .nav-link {
+    text-transform: uppercase;
     font-size: 0.75rem !important;
+    margin-bottom: -1px;
     background: 0 0;
+    border: 1px solid transparent;
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+    padding: 0.5rem 1rem;
     color: #5b7898 !important;
-    padding: 5px 0 5px 0;
 }
 
 .nav-tabs .nav-link:hover {
@@ -930,7 +935,9 @@ a.dropdown-toggle { font-size: 1.6rem !important; }
 .nav-tabs .nav-link.active {
     color: #5b7898 !important;
     font-weight: 600;
+    padding: 0.5rem 1rem !important;
     background-color: #fff;
+    border-color: #5b7898 #5b7898 #fff;
 }
 
 .sep {

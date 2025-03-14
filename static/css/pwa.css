@@ -28,6 +28,10 @@
     padding:0px;
 }
 
+.orange {
+    color: #f6303f;
+}
+
 h3 {
     color: #333333;
     font-size: 1.2rem;
@@ -38,6 +42,18 @@ h3 {
 input.pin {
     border: 1px solid #ced4da;
     font-size: 1.2rem;;
+}
+input#img {
+    font-size: 0.8rem;
+}
+
+.nav-bar {   
+    background: #dbe9f0;
+    color: #101d61;
+}
+
+.rounded {
+    border-radius: 15px !important;
 }
 
 /*********** END UTILS *************/
@@ -67,8 +83,10 @@ input.pin {
     font-weight: 600;
 }
 .btn-primary {
-    background-color: #8c113c !important;
-    border: 1px solid #8c113c !important;
+    background-color: #101d61 !important;
+    border: 1px solid #101d61 !important;
+    text-transform: uppercase;
+    font-weight: 600;
 }
 
 /*********** END BUTTONS *************/
@@ -129,7 +147,7 @@ img.logo {
 /*********** CONTENT *************/
 
 body {
-    background: #f5f5f5;
+    background: #fff;
 }
 
 .container-fluid {
@@ -168,13 +186,30 @@ a.asm {
     vertical-align: top;
 }
 
+.service-status {
+    color: #fff !important;
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+i.fa.fa-arrow-circle-right {
+    font-size: 1.2rem;
+}
+
+/*********** CLIENT INFO *************/
+
+.info-client,
+.info-service {
+    color: #000;
+}
+
+
 /*********** QR *************/
 
 .reader { 
     border: none !important;
-    /*width: 400px;**/
     width: 100%;
-    /*margin-top: 50px;*/
 }
 
 button.html5-qrcode-element {

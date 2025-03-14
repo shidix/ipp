@@ -5,9 +5,11 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.models import User
 from datetime import datetime
 
+#import whisper
+
 from ipp.decorators import group_required_pwa
 from ipp.commons import user_in_group, get_or_none, get_param
-from gestion.models import Employee, Client, Service, ServiceStatus, ServiceImage
+from gestion.models import Employee, Client, Service, ServiceStatus, ServiceImage, Note
 
 
 @group_required_pwa("employees")
@@ -48,7 +50,10 @@ def pin_logout(request):
 '''
 @group_required_pwa("employees")
 def employee_home(request):
-    return render(request, "pwa/employees/home.html", {"obj": request.user.employee})
+    context = {"obj": request.user.employee}
+    if user_in_group(request.user, "admins"):
+        context["notes_list"] = Note.objects.filter(deleted=False)
+    return render(request, "pwa/employees/home.html", context)
 
 @group_required_pwa("employees")
 def employee_service(request, obj_id):
@@ -65,4 +70,20 @@ def employee_service_save(request):
     if "img" in request.FILES and request.FILES["img"] != "":
         ServiceImage.objects.create(service=service, image=request.FILES["img"])
     return redirect(reverse("pwa-employee-service", kwargs={'obj_id': service.id}))
+
+@group_required_pwa("employees")
+def employee_note(request):
+    return render(request, "pwa/employees/note.html", {})
+
+@group_required_pwa("employees")
+def employee_note_save(request):
+    concept = get_param(request.POST, "concept")
+    audio = None
+    if "audio" in request.FILES and request.FILES["audio"] != "":
+        audio = request.FILES["audio"]
+        #model = whisper.load_model("base")
+        #concept = model.transcribe(audio, language="es")
+    if concept != "" or audio != None:
+        note = Note.objects.create(concept=concept, audio=audio)
+    return redirect(reverse('pwa-employee'))
 
