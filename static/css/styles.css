@@ -143,11 +143,14 @@ span.status-completed, span.status-assigned, span.status-waiting {
 .inactive {
 	background-color: #ccc !important;
 }
+.rmv {
+    color: red !important;
+}
 
 .content {
 	background: white;
     overflow-y: scroll;
-	height: 95vh;
+	min-height: 95vh;
 }
 
 .gral-acts, .gral-acts:hover {

@@ -3,44 +3,29 @@
 
 {% block content%}
     {% if request.user|in_group:"admins"%}
-        <div class="mb-4 text-center"><a class="btn" href="{% url "pwa-employee-note" %}">Nueva Nota</a></div>
-        <div class="nav-bar text-center p-2"><strong>NOTAS</strong></div>
-        {% for item in notes_list %}
-            <div class="card mt-3"><div class="card-body border-secondary">
-                <div class="row">
-                    <div class="col-3 text-start">{{item.date|date:"d-m-Y H:i"}}</div>
-                    <div class="col-9 text-start">{{item.concept}}</div>
-                </div>
-                <div class="row mt-4">
-                    <div class="col-12 text-start">
-                        {% if item.audio %}
-                            <audio controls>
-                                {#<source src="horse.ogg" type="audio/ogg">#}
-                                <source src="{{item.audio.url}}" type="audio/mpeg">
-                                Your browser does not support the audio element.
-                            </audio>
-                        {% endif %}
-                    </div>
-                </div>
-            </div> </div>
-        {% endfor %}
-    {% else %}
-        <div class="nav-bar text-center p-2"><strong>SERVICIOS DE HOY</strong></div>
-        {% for item in obj.services.all %}
-            {#<div class="row m-0 mt-3">#}
-            <div class="card mt-3"><div class="card-body border-secondary" style="background:{{item.status.color}}">
-                <a class="service-status- btn w-100" href="{% url "pwa-employee-service" item.id %}">
-                    {#style="background:{{item.status.color}}">#}
-                    <div class="row">
-                        <div class="col-6 text-start">{{item.service_type.name}}</div>
-                        <div class="col-4 text-start text-white"><strong>{{item.status.name}}</strong></div>
-                        <div class="col-2 text-center"><i class="fa fa-arrow-circle-right"></i></div>
-                    </div>
-                    <div class="row"> <div class="12 text-start"><small>{{item.client.name}}</small></div> </div>
-                    <div class="row"> <div class="12 text-start"><small>{{item.client.phone}}</small></div> </div>
-                    <div class="row"> <div class="12 text-start"><small>{{item.client.address}}</small></div> </div>
-                </a>
-            </div> </div>
-        {% endfor %}
+        <div class="my-3 text-center"><a class="btn btn-primary w-100 py-3" href="{% url "pwa-employee-notes" %}">Ver Notas</a></div>
     {% endif %}
+
+    <div class="nav-bar text-center p-2"><strong>SERVICIOS DE HOY</strong></div>
+    {% for item in obj.services.all %}
+        {#<div class="row m-0 mt-3">#}
+        <div class="card mt-3 p-0"><div class="card-body p-0">
+            <a class="service-status- btn w-100 p-0" href="{% url "pwa-employee-service" item.id %}">
+                {#style="background:{{item.status.color}}">#}
+                <div class="row m-0">
+                    <div class="col-11">
+                        <div class="row">
+                            <div class="col-8 text-start ext-white pt-2"><strong>{{item.service_type.name}}</strong></div>
+                            <div class="col-4 text-end ext-white status-name pt-2"><strong>{{item.status.name}}</strong></div>
+                            <div class="col-8 text-start"><small>{{item.client.name}}</small></div>
+                            <div class="col-4 text-end"><small>{{item.client.phone}}</small></div>
+                            <div class="col-12 text-start pt-2"><small>{{item.client.address}}</small></div>
+                        </div>
+                    </div>
+                    <div class="col-1 flap text-center text-white" style="background:{{item.status.color}}">
+                        <i class="fa fa-angle-right"></i></div>
+                </div>
+            </a>
+        </div> </div>
+    {% endfor %}
 {% endblock %}

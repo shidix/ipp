@@ -5,7 +5,8 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.models import User
 from datetime import datetime
 
-#import whisper
+import subprocess
+import threading
 
 from ipp.decorators import group_required_pwa
 from ipp.commons import user_in_group, get_or_none, get_param
@@ -50,10 +51,10 @@ def pin_logout(request):
 '''
 @group_required_pwa("employees")
 def employee_home(request):
-    context = {"obj": request.user.employee}
-    if user_in_group(request.user, "admins"):
-        context["notes_list"] = Note.objects.filter(deleted=False)
-    return render(request, "pwa/employees/home.html", context)
+    #context = {"obj": request.user.employee}
+    #if user_in_group(request.user, "admins"):
+    #    context["notes_list"] = Note.objects.filter(deleted=False)
+    return render(request, "pwa/employees/home.html", {"obj": request.user.employee})
 
 @group_required_pwa("employees")
 def employee_service(request, obj_id):
@@ -72,8 +73,18 @@ def employee_service_save(request):
     return redirect(reverse("pwa-employee-service", kwargs={'obj_id': service.id}))
 
 @group_required_pwa("employees")
+def employee_notes(request):
+    context = {"obj": request.user.employee}
+    if user_in_group(request.user, "admins"):
+        context["notes_list"] = Note.objects.filter(deleted=False)
+    return render(request, "pwa/employees/notes.html", context)
+
+@group_required_pwa("employees")
 def employee_note(request):
     return render(request, "pwa/employees/note.html", {})
+
+def transcribe_audio(file):
+    subprocess.run(["python", "transcribir.py", file])
 
 @group_required_pwa("employees")
 def employee_note_save(request):
@@ -81,9 +92,11 @@ def employee_note_save(request):
     audio = None
     if "audio" in request.FILES and request.FILES["audio"] != "":
         audio = request.FILES["audio"]
-        #model = whisper.load_model("base")
-        #concept = model.transcribe(audio, language="es")
+        concept = "Esperando traducción de audio..."
     if concept != "" or audio != None:
         note = Note.objects.create(concept=concept, audio=audio)
+        if "audio" in request.FILES and request.FILES["audio"] != "":
+            t = threading.Thread(target=transcribe_audio, args=[note.audio.url], daemon=True)
+            t.start()
     return redirect(reverse('pwa-employee'))
 

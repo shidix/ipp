@@ -17,22 +17,25 @@
             {% csrf_token %}
             <input type="hidden" id="service" name="service" value="{{obj.id}}" />
             <i class="fa fa-file-text orange"></i> <strong>{% trans "Descripción del servicio" %}</strong><br />
-            <textarea class="form-control" id="emp_notes" name="emp_notes" placeholder="{%trans "Notas..."%}">{{obj.emp_notes}}</textarea>
-            <br/>
+            {{obj.notes}}<br/><br/>
+
+            <i class="fas fa-thumbtack orange"></i> <strong>{% trans "Notas" %}</strong><br />
+            <textarea class="form-control" id="emp_notes" name="emp_notes" placeholder="{%trans "Descripción..."%}">
+                {{obj.emp_notes}}</textarea> <br/>
+
             <i class="fa fa-info-circle orange"></i> <strong>{% trans "Estado" %}</strong><br />
             <select class="form-control" id="status" name="status">
                 <option value="">{% trans "--Seleccione un estado--" %}</option>
                 {% for item in status_list %} 
                     <option value="{{item.id}}" {%if item == obj.status%}selected{%endif%}>{{item.name}}</option> 
                 {% endfor %}
-            </select>
-            <br/>
+            </select> <br/>
+
             <i class="fa fa-image orange"></i> <strong>{% trans "Fotos" %}</strong><br />
-            {% for img in obj.images.all %} <img src="{{img.image.url}}" alt="image" class="rounded" width="33%" /> {% endfor %}
-            <br/> <br/>
+            {%for img in obj.images.all%}<img src="{{img.image.url}}" alt="image" class="rounded" width="33%"/>{%endfor%}<br/><br/>
             {#<label for ="img" class="btn btn-smi btn-info"> <i class="fas fa-upload"></i> {% trans "Foto" %}</label>#}
-            <input type="file" id="img" name="img" accept="image/*;capture=camera" />
-            <br/> <br/>
+            <input type="file" id="img" name="img" accept="image/*;capture=camera" /> <br/> <br/>
+
             <input type="submit" class="btn btn-primary w-100 py-3" value="{% trans "Enviar" %}"/>
         </form>
     </div>

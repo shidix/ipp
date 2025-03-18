@@ -155,7 +155,7 @@ body {
 }
 
 .content {
-    color:#337ab7;
+    color:#333;
 }
 .content {
     padding-bottom:50px;
@@ -195,6 +195,18 @@ a.asm {
 
 i.fa.fa-arrow-circle-right {
     font-size: 1.2rem;
+}
+.status-name {
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.flap {
+    align-items: center; 
+    font-size: 1.8rem;
+    text-align: center; 
+    display: grid;
 }
 
 /*********** CLIENT INFO *************/
