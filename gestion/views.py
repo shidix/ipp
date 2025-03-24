@@ -20,22 +20,39 @@ def init_session_date(request, key):
 
 def get_services(request):
     value = get_session(request, "s_name")
+    s_type = get_session(request, "s_type")
+    status = get_session(request, "s_status")
+    charged = get_session(request, "s_charged")
+    value = get_session(request, "s_name")
     i_date = datetime.strptime("{} 00:00".format(get_session(request, "s_idate")), "%Y-%m-%d %H:%M")
     e_date = datetime.strptime("{} 23:59".format(get_session(request, "s_edate")), "%Y-%m-%d %H:%M")
 
     kwargs = {"ini_date__gte": i_date, "ini_date__lte": e_date}
     if value != "":
         kwargs["employee__name__icontains"] = value
+    if s_type != "":
+        kwargs["service_type__id"] = s_type
+    if status != "":
+        kwargs["status__id"] = status
+    if charged == "0":
+        kwargs["charged"] = False
+    if charged == "1":
+        kwargs["charged"] = True
 
+    print(kwargs)
     return Service.objects.filter(**kwargs).order_by("-ini_date")
 
 @group_required("admins",)
 def index(request):
     init_session_date(request, "s_idate")
     init_session_date(request, "s_edate")
-    print(get_services(request))
-    print(get_notes(request))
-    return render(request, "index.html", {"item_list": get_services(request), "notes": get_notes(request)})
+    context = {
+        "item_list": get_services(request), 
+        "notes": get_notes(request), 
+        "type_list": ServiceType.objects.all(), 
+        "status_list": ServiceStatus.objects.all()
+    }
+    return render(request, "index.html", context)
 
 @group_required("admins",)
 def services_list(request):
@@ -46,6 +63,9 @@ def services_search(request):
     set_session(request, "s_name", get_param(request.GET, "s_name"))
     set_session(request, "s_idate", get_param(request.GET, "s_idate"))
     set_session(request, "s_edate", get_param(request.GET, "s_edate"))
+    set_session(request, "s_type", get_param(request.GET, "s_type"))
+    set_session(request, "s_status", get_param(request.GET, "s_status"))
+    set_session(request, "s_charged", get_param(request.GET, "s_charged"))
     return render(request, "services-list.html", {"item_list": get_services(request)})
 
 @group_required("admins",)
@@ -67,12 +87,14 @@ def services_form_save(request):
     status = get_or_none(ServiceStatus, get_param(request.GET, "status"))
     client = get_or_none(Client, get_param(request.GET, "client"))
     emp = get_or_none(Employee, get_param(request.GET, "employee"))
+    charged = get_param(request.GET, "charged")
 
     obj.service_type = s_type
     obj.status = status
     obj.client = client
     obj.employee = emp
     obj.notes = get_param(request.GET, "notes")
+    obj.charged = True if charged != "" else False
     obj.save()
     return render(request, "services-list.html", {"item_list": get_services(request)})
 

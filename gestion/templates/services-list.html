@@ -6,10 +6,11 @@
     <div class="row main-th py-3 m-0">
         <div class="col-1"> {% trans 'Servicio' %} </div>
         <div class="col-2"> {% trans 'Técnico' %} </div>
-        <div class="col-2"> {% trans 'Cliente' %} </div>
-        <div class="col-2"> {% trans 'Dirección' %} </div>
-        <div class="col-3"> {% trans 'Notas técnico' %} </div>
+        <div class="col-3"> {% trans 'Cliente' %} </div>
+        <div class="col-3"> {% trans 'Dirección' %} </div>
+        {#<div class="col-2"> {% trans 'Notas técnico' %} </div>#}
         <div class="col-1"> {% trans 'Estado' %} </div>
+        <div class="col-1"> {% trans 'Cobrada' %} </div>
         <div class="col-1"></div>
     </div>
 
@@ -17,10 +18,12 @@
         <div class="row list-item pt-2 pb-2 m-0" id="row_{{item.id}}">
             <div class="col-1">{{item.service_type.name}}</div>
             <div class="col-2">{{item.employee.name}}</div>
-            <div class="col-2">{{item.client.name}}</div>
-            <div class="col-2">{{item.client.address}}</div>
-            <div class="col-3">{{item.emp_notes}}</div>
-            <div class="col-1"><span class="status-waiting">En espera</span></div>
+            <div class="col-3">{{item.client.name}}</div>
+            <div class="col-3">{{item.client.address}}</div>
+            {#<div class="col-2">{{item.emp_notes}}</div>#}
+            {#<div class="col-1"><span class="status-waiting">En espera</span></div>#}
+            <div class="col-1"><span class="p-2" style="background:{{item.status.color}}">{{item.status.name}}</span></div>
+            <div class="col-1">{%if item.charged%}<i class="fas fa-check"></i>{%else%}<i class="fas fa-times"></i>{%endif%}</div>
             <div class="col-1 text-right">
                 <a class="btn btn-xs ark" data-url="{% url "services-form" %}" data-target-modal="common-modal" 
                     data-obj_id="{{item.id}}" title="{% trans 'Editar' %}"><i class="fas fa-edit"></i></a> 
@@ -28,6 +31,7 @@
                     title="{% trans 'Borrar' %}" data-confirm="{% trans "Are you sure to remove this element?" %}">
                     <i class="fas fa-trash"></i></a> 
             </div>
+            <div class="col-12"><strong>{% trans 'Notas técnico' %}:</strong> {{item.emp_notes}}</div>
         </div>
     {% endfor %}
 </div>
