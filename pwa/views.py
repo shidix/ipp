@@ -10,7 +10,7 @@ import threading
 
 from ipp.decorators import group_required_pwa
 from ipp.commons import user_in_group, get_or_none, get_param
-from gestion.models import Employee, Client, Service, ServiceStatus, ServiceImage, Note
+from gestion.models import Employee, Client, Service, ServiceStatus, ServiceType, ServiceImage, Note
 
 
 @group_required_pwa("employees")
@@ -60,6 +60,39 @@ def employee_home(request):
 def employee_service(request, obj_id):
     service = get_or_none(Service, obj_id)
     return render(request, "pwa/employees/service.html", {"obj": service, "status_list": ServiceStatus.objects.all()})
+
+@group_required_pwa("employees")
+def employee_service_new(request, obj_id=""):
+    obj = get_or_none(Service, obj_id)
+    type_list = ServiceType.objects.all()
+    status_list = ServiceStatus.objects.all()
+    client_list = Client.objects.all()
+    employee_list = Employee.objects.all()
+    context = {'obj':obj, 'type_list':type_list, 'status_list':status_list, 'client_list':client_list, 'employee_list':employee_list}
+    return render(request, "pwa/employees/service_new.html", context)
+
+@group_required_pwa("employees")
+def employee_service_new_save(request):
+    s_type = get_or_none(ServiceType, get_param(request.POST, "service_type"))
+    status = get_or_none(ServiceStatus, get_param(request.POST, "status"))
+    client = get_or_none(Client, get_param(request.POST, "client"))
+    emp = get_or_none(Employee, get_param(request.POST, "employee"))
+    notes = get_param(request.POST, "notes")
+    #charged = get_param(request.GET, "charged")
+
+    obj = get_or_none(Service, get_param(request.POST, "obj_id"))
+    if obj == None:
+        obj = Service.objects.create()
+    obj.service_type = s_type
+    obj.status = status
+    obj.client = client
+    obj.employee = emp
+    obj.notes = notes
+    obj.save()
+    if "img" in request.FILES and request.FILES["img"] != "":
+        ServiceImage.objects.create(service=obj, image=request.FILES["img"])
+    #obj.charged = True if charged != "" else False
+    return redirect(reverse("pwa-employee-service-new", kwargs={'obj_id': obj.id}))
 
 @group_required_pwa("employees")
 def employee_service_save(request):
