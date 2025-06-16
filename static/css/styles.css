@@ -97,7 +97,7 @@ h1 {
 	 -webkit-box-shadow: 0 1px 5px rgba(0,0,0,0.2);
 }
 .list-item-cl:hover {
-	background-color: #e3e5fe;
+	background-color: #f1f2fb;
 }
 
 th.row.main-th {
@@ -122,7 +122,7 @@ tr.small th {
 /****************************
  	Status classes
 ****************************/
-
+/*
 span.status-completed { background: #94ef52; }
 span.status-assigned { background: #a1a4ff; }
 span.status-waiting { background: #fa8639; }
@@ -134,6 +134,12 @@ span.status-completed, span.status-assigned, span.status-waiting {
 	padding: 0.25rem;
     text-transform: uppercase;
 	width: 100%;
+}
+*/
+
+span.status-service {
+    color: #fff;
+    padding: 10px;
 }
 
 /************************
@@ -149,8 +155,11 @@ span.status-completed, span.status-assigned, span.status-waiting {
 
 .content {
 	background: white;
-    overflow-y: scroll;
-	min-height: 95vh;
+/*    overflow-y: scroll;*/
+    /*
+	height: 95vh;    
+    padding-bottom: 3.5rem;
+    */
 }
 
 .gral-acts, .gral-acts:hover {
@@ -181,6 +190,15 @@ span.status-completed, span.status-assigned, span.status-waiting {
 .alert-warning.gesp:hover {
 	background-color: #e3e5fe;
 }
+
+.bt-grey {
+    border-top: 1px dashed #e3e5fe;
+}
+
+/************************
+	END UTILITIES		
+************************/
+
 
 .btn-submit, .btn-submit:hover {
 	background-color: #424242 !important;
@@ -262,6 +280,13 @@ i.fas.fa-times, i.far.fa-users, i.fas.fa-users.orange, i.fa.fa-medkit.orange, i.
 i.fas.fa-info-circle.orange, i.fas.fa-traffic-light.orange, i.fas.fa-user.orange, i.fas.fa-phone.orange, i.fas.fa-envelope.orange, i.fas.fa-map-marker.orange {
 	color: #f6303f;
 }
+.orange {
+    color: #f6303f !important;
+}
+
+i.fas.fa-check-circle {
+    color: #0dc143;
+}
 
 img.img-fluid {
 	box-shadow: 0px 9px 6px -6px #b5b5b5;
@@ -306,6 +331,7 @@ img.img-fluid {
        font-style: italic;
        letter-spacing: 0;
 }
+.toolbar-search select,
 .toolbar-search input {
 	border:1px solid #ced4da !important;
 }
@@ -333,7 +359,7 @@ input#s-name.autosearch.form-control.form-control-dark.w-100 {
     text-decoration: none;
 	color: #fff !important;
 }
-
+/*
 span.status-info {
     background: #e4d9d1;
     color:#404a5d; 
@@ -355,6 +381,8 @@ span.status-info {
     background-color: #f6e5c6;
     font-weight: 600;
 }
+
+*/
 
 .toolbar-content {
 	display: flex;
@@ -956,16 +984,16 @@ a.dropdown-toggle { font-size: 1.6rem !important; }
 #main-content {
     display: flex;
     flex-direction: row;
-    height: 100vh;
-    max-height: 100vh;
+    /*height: 100vh;
+    max-height: 100vh;*/
     align-items: stretch;
-    overflow-y: hidden;
+/*    overflow-y: hidden;*/
 }
 
 #content-section {
 /*    background: #f5f5f5;*/
     flex-basis: 99.5%;
-    height: 99vh;
+   /* height: 99vh;*/
     padding: 10px;
     padding-bottom: 3.5rem;
 }

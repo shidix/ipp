@@ -11,6 +11,9 @@ urlpatterns = [
     # EMPLOYEES
     path('employee/', views.employee_home, name="pwa-employee"),
     path('employee/service/<int:obj_id>/', views.employee_service, name="pwa-employee-service"),
+    path('employee/service/new/', views.employee_service_new, name="pwa-employee-service-new"),
+    path('employee/service/new/<int:obj_id>/', views.employee_service_new, name="pwa-employee-service-new"),
+    path('employee/service/new/save/', views.employee_service_new_save, name="pwa-employee-service-new-save"),
     path('employee/service/save/', views.employee_service_save, name="pwa-employee-service-save"),
     path('employee/notes/', views.employee_notes, name="pwa-employee-notes"),
     path('employee/note/', views.employee_note, name="pwa-employee-note"),

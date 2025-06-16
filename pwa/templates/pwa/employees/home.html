@@ -6,6 +6,9 @@
         <div class="my-3 text-center"><a class="btn btn-primary w-100 py-3" href="{% url "pwa-employee-notes" %}">Ver Notas</a></div>
     {% endif %}
 
+    <div class="my-3 text-center"><a class="btn btn-primary w-100 py-3" href="{% url "pwa-employee-service-new" %}">
+        Nuevo servicio</a></div>
+
     <div class="nav-bar text-center p-2"><strong>SERVICIOS</strong></div>
     {% for item in obj.services.all %}
         {#<div class="row m-0 mt-3">#}
