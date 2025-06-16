@@ -8,6 +8,7 @@ urlpatterns = [
     path('services/form', views.services_form, name='services-form'),
     path('services/form-save', views.services_form_save, name='services-form-save'),
     path('services/remove', views.services_remove, name='services-remove'),
+    path('services/remove-soft', views.services_remove_soft, name='services-remove-soft'),
 
     #---------------------- NOTES -----------------------
     #path('notes', views.notes, name='notes'),

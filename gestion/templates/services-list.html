@@ -22,14 +22,24 @@
             <div class="col-3"><i class="fas fa-map-marker orange"></i> {{item.client.address}}</div>
             {#<div class="col-2">{{item.emp_notes}}</div>#}
             {#<div class="col-1"><span class="status-waiting">En espera</span></div>#}
-            <div class="col-1 pt-2"><span class="status-service" style="background:{{item.status.color}}"><strong>{{item.status.name}}</strong></span></div>
-            <div class="col-1 pt-2 text-center">{%if item.charged%}<i class="fas fa-check-circle"></i>{%else%}<i class="fas fa-times"></i>{%endif%}</div>
+            <div class="col-1 pt-2">
+                <span class="status-service" style="background:{{item.status.color}}"><strong>{{item.status.name}}</strong></span>
+            </div>
+            <div class="col-1 pt-2 text-center">
+                {%if item.charged%}<i class="fas fa-check-circle"></i>{%else%}<i class="fas fa-times"></i>{%endif%}
+            </div>
             <div class="col-1 pb-2 text-right">
                 <a class="btn btn-xs ark" data-url="{% url "services-form" %}" data-target-modal="common-modal" 
                     data-obj_id="{{item.id}}" title="{% trans 'Editar' %}"><i class="fas fa-edit"></i></a> 
-                <a class="btn btn-xs ark" data-url="{% url "services-remove" %}" data-target="item-list" data-obj_id="{{item.id}}" 
-                    title="{% trans 'Borrar' %}" data-confirm="{% trans "Are you sure to remove this element?" %}">
-                    <i class="fas fa-trash"></i></a> 
+                {% if item.deleted %}
+                    <a class="btn btn-xs ark" data-url="{% url "services-remove" %}" data-target="item-list" data-obj_id="{{item.id}}" 
+                        title="{% trans 'Borrar' %}" data-confirm="{%trans "Está seguro/a de que desea borrar este elemento?"%}">
+                        <i class="fas fa-trash"></i></a> 
+                {% else %}
+                    <a class="btn btn-xs ark" data-url="{% url "services-remove-soft" %}" data-target="item-list" 
+                        data-obj_id="{{item.id}}" title="{%trans 'Borrar'%}" 
+                        data-confirm="{%trans "Está seguro/a de que desea borrar este elemento?"%}"> <i class="fas fa-trash"></i></a> 
+                {% endif %}
             </div>
             <div class="col-12 bt-grey mt-2 pt-2"><i class="fa fa-file orange"></i> <strong>{% trans 'Descripción' %}:</strong> <br />
                 {{item.notes}}</div>
@@ -45,19 +55,34 @@
 <div class="d-lg-none"> 
     {% for item in item_list %}
     <div class="row list-item-cl pt-2 pb-2 m-0" id="row_{{item.id}}">
-        <div class="col-12"> <small><i class="fas fa-tools orange"></i> {% trans 'Servicio' %}</small> <br /> <strong>{{item.service.name}}</strong></div>
-        <div class="col-6 mt-3"> <small><i class="fas fa-user orange"></i> {% trans 'Técnico' %}</small> <br /> <strong>{{item.employee.name}}</strong></div>
-        <div class="col-5 offset-1 mt-3"> <small><i class="fas fa-user orange"></i> {% trans 'Cliente' %} </small> <br /> <strong>{{item.client.name}}</strong> </div>
-        <div class="col-6 mt-3"> <small><i class="fas fa-info-circle orange"></i> {% trans 'Info' %} </small> <br /> <strong>Info</strong> </div>
-        <div class="col-5 offset-1 mt-3"> <small><i class="fas fa-traffic-light orange"></i> {% trans 'Estado' %} </small> <br /> <strong><span class="status-waiting">En espera</span></strong> </div>
-        <div class="col-12 mt-"> <small><i class="fas fa-map-marker orange"></i> {% trans 'Dirección' %}</small> <br /><strong>{{item.client.address}}</strong> </div>
+        <div class="col-12"> 
+            <small><i class="fas fa-tools orange"></i> {% trans 'Servicio' %}</small> <br /> <strong>{{item.service.name}}</strong>
+        </div>
+        <div class="col-6 mt-3"> 
+            <small><i class="fas fa-user orange"></i> {% trans 'Técnico' %}</small> <br /> <strong>{{item.employee.name}}</strong>
+        </div>
+        <div class="col-5 offset-1 mt-3"> 
+            <small><i class="fas fa-user orange"></i> {% trans 'Cliente' %} </small> <br /> <strong>{{item.client.name}}</strong> 
+        </div>
+        <div class="col-6 mt-3"> 
+            <small><i class="fas fa-info-circle orange"></i> {% trans 'Info' %} </small> <br /> <strong>Info</strong> 
+        </div>
+        <div class="col-5 offset-1 mt-3"> 
+            <small><i class="fas fa-traffic-light orange"></i> {% trans 'Estado' %} </small> <br /> 
+            <strong><span class="status-waiting">En espera</span></strong> 
+        </div>
+        <div class="col-12 mt-"> 
+            <small><i class="fas fa-map-marker orange"></i> {% trans 'Dirección' %}</small> <br />
+            <strong>{{item.client.address}}</strong> 
+        </div>
         <div class="col-5 mt-2">
-            <button type="button" class="btn btn-primary-outline ark w-100" data-url="{% url "services-form" %}" data-target-modal="common-modal" 
-                data-obj_id="{{item.id}}" title="{% trans 'Editar' %}"><small>Editar</small></button> 
+            <button type="button" class="btn btn-primary-outline ark w-100" data-url="{% url "services-form" %}" 
+                data-target-modal="common-modal" data-obj_id="{{item.id}}" title="{% trans 'Editar' %}"><small>Editar</small></button> 
         </div>
         <div class="col-5 offset-2 mt-2">
-            <button type="button" class="btn btn-outline-danger ark w-100" data-url="{% url "services-remove" %}" data-target="item-list" data-obj_id="{{item.id}}" 
-                title="{% trans 'Borrar' %}" data-confirm="{% trans "Are you sure to remove this element?" %}"><small>Borrar</small></button> 
+            <button type="button" class="btn btn-outline-danger ark w-100" data-url="{% url "services-remove" %}" 
+                data-target="item-list" data-obj_id="{{item.id}}" title="{% trans 'Borrar' %}" 
+                data-confirm="{% trans "Are you sure to remove this element?" %}"><small>Borrar</small></button> 
         </div>
     </div>
 

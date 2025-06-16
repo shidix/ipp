@@ -116,8 +116,8 @@ def employee_notes(request):
 def employee_note(request):
     return render(request, "pwa/employees/note.html", {})
 
-def transcribe_audio(file):
-    subprocess.run(["python", "transcribir.py", file])
+def transcribe_audio(file, obj_id):
+    subprocess.run(["python", "transcribir.py", file, str(obj_id)])
 
 @group_required_pwa("employees")
 def employee_note_save(request):
@@ -129,7 +129,7 @@ def employee_note_save(request):
     if concept != "" or audio != None:
         note = Note.objects.create(concept=concept, audio=audio)
         if "audio" in request.FILES and request.FILES["audio"] != "":
-            t = threading.Thread(target=transcribe_audio, args=[note.audio.url], daemon=True)
+            t = threading.Thread(target=transcribe_audio, args=[note.audio.url, note.id], daemon=True)
             t.start()
     return redirect(reverse('pwa-employee'))
 
