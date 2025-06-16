@@ -102,7 +102,7 @@ class ServiceStatus(models.Model):
         verbose_name_plural = _('Estados')
 
 class Service(models.Model):
-    deleted = models.BooleanField(default=False, verbose_name=_('Desactivado'));
+    deleted = models.BooleanField(default=False, verbose_name=_('Desactivado'), null=True);
     charged = models.BooleanField(default=False, verbose_name=_('Cobrado'));
     ini_date = models.DateTimeField(default=datetime.datetime.now(), null=True, verbose_name=_('Inicio'))
     end_date = models.DateTimeField(default=datetime.datetime.now(), null=True, verbose_name=_('Fin'))
