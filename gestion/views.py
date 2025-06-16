@@ -18,7 +18,7 @@ def init_session_date(request, key):
     #if not key in request.session:
     set_session(request, key, datetime.now().strftime("%Y-%m-%d"))
 
-def get_services(request):
+def get_services(request, deleted=False):
     value = get_session(request, "s_name")
     s_type = get_session(request, "s_type")
     status = get_session(request, "s_status")
@@ -27,7 +27,7 @@ def get_services(request):
     i_date = datetime.strptime("{} 00:00".format(get_session(request, "s_idate")), "%Y-%m-%d %H:%M")
     e_date = datetime.strptime("{} 23:59".format(get_session(request, "s_edate")), "%Y-%m-%d %H:%M")
 
-    kwargs = {"ini_date__gte": i_date, "ini_date__lte": e_date}
+    kwargs = {"ini_date__gte": i_date, "ini_date__lte": e_date, 'deleted': deleted}
     if value != "":
         kwargs["employee__name__icontains"] = value
     if s_type != "":
@@ -56,7 +56,8 @@ def index(request):
 
 @group_required("admins",)
 def services_list(request):
-    return render(request, "services-list.html", {"item_list": get_services(request)})
+    deleted = True if get_param(request.GET, "deleted") == "True" else False
+    return render(request, "services-list.html", {"item_list": get_services(request, deleted)})
 
 @group_required("admins",)
 def services_search(request):
@@ -104,6 +105,15 @@ def services_remove(request):
     if obj != None:
         obj.delete()
     return render(request, "services-list.html", {"item_list": get_services(request)})
+
+@group_required("admins",)
+def services_remove_soft(request):
+    obj = get_or_none(Service, request.GET["obj_id"]) if "obj_id" in request.GET else None
+    if obj != None:
+        obj.deleted = True
+        obj.save()
+    return render(request, "services-list.html", {"item_list": get_services(request)})
+
 
 '''
     NOTES

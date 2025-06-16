@@ -2,14 +2,16 @@ import whisper
 import sys
 import os
 import requests
+PATH = "/var/www/django/ipp/"
 
 # Verificar que se proporcionó un archivo como argumento
-if len(sys.argv) != 2:
-    print("Uso: python3 transcribir.py <ruta_al_archivo_audio>")
+if len(sys.argv) != 3:
+    print("Uso: python3 transcribir.py <ruta_al_archivo_audio> <id_objeto>")
     sys.exit(1)
 
 # Obtener la ruta del archivo de audio desde los argumentos
-audio_file = sys.argv[1]
+audio_file = "{}{}".format(PATH, sys.argv[1])
+obj_id = sys.argv[2]
 
 # Verificar si el archivo existe
 if not os.path.isfile(audio_file):
@@ -29,7 +31,7 @@ model = whisper.load_model("base")  # Puedes usar "tiny", "base", "small", "medi
 result = model.transcribe(audio_file, language="es")
 
 #print("Sending...")
-res = requests.post("https://ipp.shidix.es/gestion/set-note-concept", headers={"Accept": "application/txt"}, data={"token": "1234", "text": result["text"], "note": 5})
+res = requests.post("https://ipp.shidix.es/gestion/set-note-concept", headers={"Accept": "application/txt"}, data={"token": "1234", "text": result["text"], "note": obj_id})
 # Guardar la transcripción en el archivo de salida
 #print(res)
 #with open(output_file, "w", encoding="utf-8") as file:
