@@ -10,8 +10,9 @@
         Nuevo servicio</a></div>
 
     <div class="nav-bar text-center p-2"><strong>SERVICIOS</strong></div>
-    {% for item in obj.services.all %}
+    {#{% for item in obj.services.all %}#}
         {#<div class="row m-0 mt-3">#}
+    {% for item in obj.services_active %}
         <div class="card mt-3 p-0"><div class="card-body p-0">
             <a class="service-status- btn w-100 p-0" href="{% url "pwa-employee-service" item.id %}">
                 {#style="background:{{item.status.color}}">#}

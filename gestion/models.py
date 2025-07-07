@@ -52,6 +52,9 @@ class Employee(models.Model):
         #return "{}:{}".format(hours, minutes) 
         #return "{} horas y {}  minutos".format(hours, minutes) 
 
+    def services_active(self):
+        return self.services.filter(deleted=False)
+
     class Meta:
         verbose_name = _('Empleado')
         verbose_name_plural = _('Empleados')
